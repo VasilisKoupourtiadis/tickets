@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using tickets.Data;
+using tickets.Models;
 
-namespace tickets.Services.Team;
+namespace tickets.Services.Teams;
 
 public class TeamService : ITeamService
 {
@@ -12,9 +13,9 @@ public class TeamService : ITeamService
         this.context = context;
     }
 
-    public async Task<ICollection<Models.Team>> GetTeamsAsync() =>
+    public async Task<ICollection<Team>> GetTeamsAsync() =>
         await context.Teams.ToListAsync();
 
-    public async Task<Models.Team> GetTeamAsync(Guid id) =>
+    public async Task<Team> GetTeamAsync(Guid id) =>
         await context.Teams.FirstOrDefaultAsync(x => x.Id.Equals(id));
 }
