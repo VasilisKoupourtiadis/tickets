@@ -1,7 +1,94 @@
 ﻿@page "/"
+@inject IServiceManager serviceManager;
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@if(teams is null || employees is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h1>Here are our teams!</h1>
 
-Welcome to your new app.
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var team in teams)
+            {
+                <tr>
+                    <td>@team.Id</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h1>Here are our employees!</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>TeamId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in employees)
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td>@employee.FullName</td>
+                    <td>@employee.Title</td>
+                    <td>@employee.TeamId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button @onclick="AddEmployee">Add employee</button>
+}
+@if (Employee is not null)
+{
+    <span class="d-block">Id: @Employee.Id</span>
+    <span class="d-block">Name: @Employee.FullName</span>
+    <span class="d-block">Title: @Employee.Title</span>
+    <span class="d-block">TeamId: @Employee.TeamId</span>
+}
+
+@code {
+    private ICollection<Team>? teams;
+
+    private ICollection<Employee>? employees;
+
+    private Employee? Employee;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+
+        teams = await serviceManager.TeamService.GetTeamsAsync();
+
+        employees = await serviceManager.EmployeeService.GetEmployeesAsync();
+    }
+
+    private async Task AddEmployee()
+    {
+        await Task.Delay(500);
+
+        var team = teams.FirstOrDefault(x => x.Id == Guid.Parse("8059ce3c-6f3f-4ba1-8b48-e1e00a10c527"));
+
+        var employee = new Employee("Donna Paulson", "Secretary", team);
+
+        serviceManager.EmployeeService.AddEmployee(employee);
+
+        await serviceManager.SaveAsync();
+
+        Employee = employee;
+    }
+}
