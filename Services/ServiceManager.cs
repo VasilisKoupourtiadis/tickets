@@ -1,6 +1,7 @@
 ﻿using tickets.Data;
 using tickets.Services.Employees;
 using tickets.Services.Teams;
+using tickets.Services.Tickets;
 
 namespace tickets.Services;
 
@@ -11,6 +12,8 @@ public class ServiceManager : IServiceManager
     private ITeamService teamService;
 
     private IEmployeeService employeeService;
+
+    private ITicketService ticketService;
 
     public ServiceManager(ApplicationContext context)
     {
@@ -35,6 +38,17 @@ public class ServiceManager : IServiceManager
             var service = employeeService is not null
                 ? employeeService
                 : employeeService = new EmployeeService(context);
+            return service;
+        }
+    }
+
+    public ITicketService TicketService
+    {
+        get
+        {
+            var service = ticketService is not null
+                ? ticketService
+                : ticketService = new TicketService(context);
             return service;
         }
     }

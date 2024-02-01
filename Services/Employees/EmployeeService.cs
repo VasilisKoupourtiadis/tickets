@@ -13,12 +13,16 @@ public class EmployeeService : IEmployeeService
         this.context = context;
     }
 
-    public async Task<Employee> GetEmployeeAsync(Guid Id)
-        => await context.Employees.FirstOrDefaultAsync(x => x.Id.Equals(Id));
+    public async Task<Employee> GetEmployeeAsync(Guid Id) => 
+        await context.Employees
+        .Include(x => x.Team)
+        .FirstOrDefaultAsync(x => x.Id.Equals(Id));
 
-    public async Task<ICollection<Employee>> GetEmployeesAsync()
-        => await context.Employees.ToListAsync();
+    public async Task<ICollection<Employee>> GetEmployeesAsync() => 
+        await context.Employees
+        .Include(x => x.Team)
+        .ToListAsync();
 
-    public void AddEmployee(Employee employee)
-        => context.Employees.Add(employee);
+    public void AddEmployee(Employee employee) => 
+        context.Employees.Add(employee);
 }

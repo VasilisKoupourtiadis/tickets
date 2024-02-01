@@ -14,7 +14,10 @@ public class TeamService : ITeamService
     }
 
     public async Task<ICollection<Team>> GetTeamsAsync() =>
-        await context.Teams.ToListAsync();
+        await context.Teams
+        .Include(x => x.Members)
+        .ThenInclude(x => x.Tickets)
+        .ToListAsync();
 
     public async Task<Team> GetTeamAsync(Guid id) =>
         await context.Teams.FirstOrDefaultAsync(x => x.Id.Equals(id));
