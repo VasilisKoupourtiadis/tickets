@@ -14,6 +14,8 @@ public class Ticket
         Title = title;
         Description = description;
         IsPending = true;
+        IsActive = false;
+        IsClosed = false;
         Employee = employee;
     }
 
@@ -25,15 +27,15 @@ public class Ticket
     [MaxLength(250)]
     public string Description { get; private set; } = string.Empty;
 
-    public bool IsActive { get { return IsActive; } private set { SetActiveStatus(); } }
+    public bool IsActive { get; private set; }
 
-    public bool IsClosed { get { return IsClosed; } private set { SetClosedStatus(); } }
+    public bool IsClosed { get; private set; }
 
     public bool IsPending { get; private set; }
 
     public string Status
     {
-        get 
+        get
         {
             if (IsActive)
                 return nameof(IsActive);

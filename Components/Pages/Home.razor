@@ -12,46 +12,26 @@ else
 {
     <h1>Here are our teams!</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var team in teams)
-            {
-                <tr>
-                    <td>@team.Id</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    foreach(var team in teams)
+    {
+        <h1 class="text-decoration-underline">@team.Id</h1>
 
-    <h1>Here are our employees!</h1>
+        foreach(var member in team.Members)
+        {
+            <h2 class="text-decoration-underline px-3">@member.FullName</h2>
+            <span class="d-block px-3">@member.Title</span>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Title</th>
-                <th>TeamId</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var employee in employees)
+            foreach(var ticket in member.Tickets)
             {
-                <tr>
-                    <td>@employee.Id</td>
-                    <td>@employee.FullName</td>
-                    <td>@employee.Title</td>
-                    <td>@employee.TeamId</td>
-                </tr>
+                <h3 class="text-decoration-underline px-3">@ticket.Title</h3>
+                <span class="d-block px-3">@ticket.Description</span>
+                <span class="d-block px-3">@ticket.Status</span>
             }
-        </tbody>
-    </table>
-    <button @onclick="AddEmployee">Add employee</button>
+        }
+    }
+
+    <button class="btn btn-dark" @onclick="AddEmployee">Add employee</button>
+    <button class="btn btn-dark" @onclick="AddTicket">Add ticket</button>
 }
 @if (Employee is not null)
 {
@@ -60,6 +40,13 @@ else
     <span class="d-block">Title: @Employee.Title</span>
     <span class="d-block">TeamId: @Employee.TeamId</span>
 }
+@if (Ticket is not null)
+{
+    <span class="d-block">Id: @Ticket.Id</span>
+    <span class="d-block">Title: @Ticket.Title</span>
+    <span class="d-block">Description: @Ticket.Description</span>
+    <span class="d-block">EmployeeId: @Ticket.Employee.FullName</span>
+}
 
 @code {
     private ICollection<Team>? teams;
@@ -67,6 +54,8 @@ else
     private ICollection<Employee>? employees;
 
     private Employee? Employee;
+
+    private Ticket? Ticket;
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,12 +72,27 @@ else
 
         var team = teams.FirstOrDefault(x => x.Id == Guid.Parse("8059ce3c-6f3f-4ba1-8b48-e1e00a10c527"));
 
-        var employee = new Employee("Donna Paulson", "Secretary", team);
+        var employee = new Employee("Jessica Pearson", "Name Partner", team);
 
         serviceManager.EmployeeService.AddEmployee(employee);
 
         await serviceManager.SaveAsync();
 
         Employee = employee;
+    }
+
+    private async Task AddTicket()
+    {
+        await Task.Delay(500);
+
+        var employee = employees.FirstOrDefault(x => x.Id == Guid.Parse("B508BDF3-E570-4252-A6D9-51374031EAA8"));
+
+        var ticket = new Ticket("Computer", "My computer won't turn on", employee);
+
+        serviceManager.TicketService.AddTicket(ticket);
+
+        await serviceManager.SaveAsync();
+
+        Ticket = ticket;
     }
 }
