@@ -1,0 +1,45 @@
+﻿@page "/teams"
+@using static tickets.Services.Teams.Queries.GetAllTeams
+@inject IServiceManager serviceManager
+@inject IMediator mediator
+@rendermode InteractiveServer
+
+<PageTitle>Teams</PageTitle>
+
+@if(teams is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Teams</h3>
+
+    @foreach(var team in teams)
+    {
+        <h1>@team.Id</h1>
+
+        foreach (var member in team.Members)
+        {
+            <h2 class="text-decoration-underline px-3">@member.FullName</h2>
+            <span class="d-block px-3">@member.Title</span>
+
+            foreach (var ticket in member.Tickets)
+            {
+                <h3 class="text-decoration-underline px-3">@ticket.Title</h3>
+                <span class="d-block px-3">@ticket.Description</span>
+                <span class="d-block px-3">@ticket.Status</span>
+            }
+        }
+    }
+}
+
+@code {
+    private ICollection<TeamsResult>? teams;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // await Task.Delay(500);
+
+        teams = await mediator.Send(new GetAllTeamsQuery());
+    }
+}
