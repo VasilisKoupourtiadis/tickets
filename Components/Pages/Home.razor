@@ -59,8 +59,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
-
         teams = await serviceManager.TeamService.GetTeamsAsync();
 
         employees = await serviceManager.EmployeeService.GetEmployeesAsync();

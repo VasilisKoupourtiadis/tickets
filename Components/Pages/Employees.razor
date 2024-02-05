@@ -1,0 +1,47 @@
+﻿@page "/employees"
+@using static tickets.Services.Employees.Queries.GetAllEmployees
+@inject IServiceManager serviceManager
+@inject IMediator mediator
+@rendermode InteractiveServer
+
+<PageTitle>Employees</PageTitle>
+
+@if (employees is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Tickets</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Created By</th>
+                <th>TeamId</th>
+                <th>Tickets Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in employees)
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td>@employee.FullName</td>
+                    <td>@employee.TeamId</td>
+                    <td>@employee.Tickets.Count()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ICollection<EmployeesResult>? employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employees = await mediator.Send(new GetAllEmployeesQuery());
+    }
+}
