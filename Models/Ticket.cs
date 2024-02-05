@@ -38,12 +38,12 @@ public class Ticket
         get
         {
             if (IsActive)
-                return nameof(IsActive);
+                return "Active";
 
             else if (IsClosed)
-                return nameof(IsClosed);
+                return "Closed";
 
-            return nameof(IsPending);
+            return "Pending";
         }
     }
 
