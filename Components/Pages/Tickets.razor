@@ -1,0 +1,49 @@
+﻿@page "/tickets"
+@using static tickets.Services.Tickets.Queries.GetAllTickets
+@inject IServiceManager serviceManager
+@inject IMediator mediator
+@rendermode InteractiveServer
+
+<PageTitle>Tickets</PageTitle>
+
+@if (tickets is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Tickets</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in tickets)
+            {
+                <tr>
+                    <td>@ticket.Id</td>
+                    <td>@ticket.Title</td>
+                    <td>@ticket.Description</td>
+                    <td>@ticket.Status</td>
+                    <td>@ticket.Employee.FullName, @ticket.Employee.Title</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ICollection<TicketsResult>? tickets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tickets = await mediator.Send(new GetAllTicketsQuery());
+    }
+}
