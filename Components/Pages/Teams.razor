@@ -14,23 +14,33 @@ else
 {
     <h3>Teams</h3>
 
-    @foreach(var team in teams)
-    {
-        <h1>@team.Id</h1>
+    <div class="table-responsive rounded">
+        <table class="table table-striped table-hover">
+            <thead class="bg-dark text-white table-responsive border-top border-start border-end border-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Total Members</th>
+                    <th>Total Tickets</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var team in teams)
+                {
+                    var totalTickets = 0;
 
-        foreach (var member in team.Members)
-        {
-            <h2 class="text-decoration-underline px-3">@member.FullName</h2>
-            <span class="d-block px-3">@member.Title</span>
-
-            foreach (var ticket in member.Tickets)
-            {
-                <h3 class="text-decoration-underline px-3">@ticket.Title</h3>
-                <span class="d-block px-3">@ticket.Description</span>
-                <span class="d-block px-3">@ticket.Status</span>
-            }
-        }
-    }
+                    <tr class="table-responsive border-top border-start border-end">
+                        <td>@team.Id</td>
+                        <td>@team.Members.Count()</td>                        
+                        @foreach(var member in team.Members)
+                        {
+                            totalTickets += member.Tickets.Count();
+                        }
+                        <td>@totalTickets</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>    
 }
 
 @code {
