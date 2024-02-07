@@ -11,5 +11,9 @@ public class EmployeesMapper : Profile
         CreateMap<Employee, GetAllEmployees.EmployeesResult>();
 
         CreateMap<Ticket, GetAllEmployees.TicketResult>();
+
+        CreateMap<Employee, GetEmployee.EmployeeResult>();
+
+        CreateMap<Ticket, GetEmployee.TicketResult>();
     }
 }
