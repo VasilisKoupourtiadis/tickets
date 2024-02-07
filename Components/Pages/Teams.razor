@@ -29,7 +29,11 @@ else
                     var totalTickets = 0;
 
                     <tr class="table-responsive border-top border-start border-end">
-                        <td>@team.Id</td>
+                        <td>
+                            <NavLink href="@($"/teams/{team.Id}")" class="text-decoration-none link-dark">
+                                @team.Id
+                            </NavLink>
+                        </td>
                         <td>@team.Members.Count()</td>                        
                         @foreach(var member in team.Members)
                         {

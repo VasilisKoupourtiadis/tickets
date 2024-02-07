@@ -26,12 +26,16 @@ else
             </thead>
             <tbody>
                 @foreach (var employee in employees)
-                {
+                {                    
                     <tr class="table-responsive border-top border-start border-end">
                         <td>@employee.Id</td>
-                        <td>@employee.FullName</td>
+                        <td>@employee.FullName, @employee.Title</td>
                         <td>@employee.TeamId</td>
-                        <td>@employee.Tickets.Count()</td>
+                        <td>
+                            <NavLink href="@($"employees/{employee.Id}")" class="text-decoration-none link-dark">
+                                @employee.Tickets.Count()
+                            </NavLink>                            
+                        </td>                                              
                     </tr>
                 }
             </tbody>
