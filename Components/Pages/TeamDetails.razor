@@ -1,0 +1,49 @@
+﻿@page "/teams/{id:guid}"
+@using static tickets.Services.Teams.Queries.GetTeam
+@inject IServiceManager serviceManager
+@inject IMediator mediator
+@rendermode InteractiveServer
+
+<PageTitle>Details</PageTitle>
+
+@if (team is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Team Details</h3>
+    <span class="d-block">Id: @Id</span>
+
+    <h3>Members</h3>
+    @foreach (var member in team.Members)
+    {
+        <span class="d-block">Employee Id: @Id</span>
+        <span class="d-block">Name: @member.FullName</span>
+        <span class="d-block">Title: @member.Title</span>
+
+        <h4>Tickets</h4>
+        foreach (var ticket in member.Tickets)
+        {
+            <span class="d-block">Ticket Id: @ticket.Id</span>
+            <span class="d-block">Title: @ticket.Title</span>
+            <span class="d-block">Description: @ticket.Description</span>
+            <span class="d-block">Status: @ticket.Status</span>
+        }
+    }
+}
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private TeamResult? team;
+
+    protected override async Task OnInitializedAsync()
+    {
+        team = await mediator.Send(new GetTeamQuery()
+        {
+            Id = Id
+        });
+    }
+}

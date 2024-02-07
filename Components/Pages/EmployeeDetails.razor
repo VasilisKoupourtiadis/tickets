@@ -1,0 +1,47 @@
+﻿@page "/employees/{id:guid}"
+@using static tickets.Services.Employees.Queries.GetEmployee
+@inject IServiceManager serviceManager
+@inject IMediator mediator
+@rendermode InteractiveServer
+
+<PageTitle>Details</PageTitle>
+
+@if (employee is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Employee Details</h3>
+
+    <span class="d-block">Employee Id: @Id</span>
+    <span class="d-block">Name: @employee.FullName</span>
+    <span class="d-block">Title: @employee.Title</span>
+    <span class="d-block">TeamId: @employee.TeamId</span>
+
+    <br />
+
+    <h4>Tickets</h4>
+    @foreach(var ticket in employee.Tickets)
+    {
+        <span class="d-block">Ticket Id: @ticket.Id</span>
+        <span class="d-block">Title: @ticket.Title</span>
+        <span class="d-block">Description: @ticket.Description</span>
+        <span class="d-block">Status: @ticket.Status</span>
+    }
+}
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private EmployeeResult? employee;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employee = await mediator.Send(new GetEmployeeQuery()
+        {
+            Id = Id
+        });
+    }
+}
