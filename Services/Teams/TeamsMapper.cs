@@ -13,5 +13,11 @@ public class TeamsMapper : Profile
         CreateMap<Employee, GetAllTeams.EmployeeResult>();
 
         CreateMap<Ticket, GetAllTeams.TicketResult>();
+
+        CreateMap<Team, GetTeam.TeamResult>();
+
+        CreateMap<Employee, GetTeam.EmployeeResult>();
+
+        CreateMap<Ticket, GetTeam.TicketResult>();
     }
 }
