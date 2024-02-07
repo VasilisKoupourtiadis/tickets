@@ -20,5 +20,8 @@ public class TeamService : ITeamService
         .ToListAsync();
 
     public async Task<Team> GetTeamAsync(Guid id) =>
-        await context.Teams.FirstOrDefaultAsync(x => x.Id.Equals(id));
+        await context.Teams
+        .Include(x => x.Members)
+        .ThenInclude(x => x.Tickets)
+        .FirstOrDefaultAsync(x => x.Id.Equals(id));
 }
