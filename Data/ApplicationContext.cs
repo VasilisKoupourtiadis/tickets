@@ -20,9 +20,10 @@ public class ApplicationContext : DbContext
     {
         var teams = new List<Team>()
         { 
-            new(), 
-            new(), 
-            new() 
+            new("Team #1"), 
+            new("Team #2"), 
+            new("Team #3"),
+            new("Team #4")
         };
 
         modelBuilder.Entity<Team>().HasData(teams);

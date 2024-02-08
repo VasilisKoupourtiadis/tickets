@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tickets.Data;
 
@@ -11,9 +12,11 @@ using tickets.Data;
 namespace tickets.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240208091547_AddNamePropToTeam")]
+    partial class AddNamePropToTeam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,22 +68,22 @@ namespace tickets.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d12af04c-fd7d-4dd2-9198-28d9037160fc"),
+                            Id = new Guid("b033d049-9958-462a-a410-683f857cfefd"),
                             Name = "Team #1"
                         },
                         new
                         {
-                            Id = new Guid("18500936-fd11-4f4b-bb7c-854435c152a3"),
+                            Id = new Guid("2b15cd05-7e64-471d-9690-78d5e071856c"),
                             Name = "Team #2"
                         },
                         new
                         {
-                            Id = new Guid("cddd43cd-916b-4e98-9057-9a8af37520ed"),
+                            Id = new Guid("e8f6acd0-3530-4191-bdd8-cfd0de2e895c"),
                             Name = "Team #3"
                         },
                         new
                         {
-                            Id = new Guid("78542b41-01e6-477d-9d60-1dcb806a4f25"),
+                            Id = new Guid("af3a3ca9-796c-4e58-a05c-d1c9e1742f28"),
                             Name = "Team #4"
                         });
                 });
@@ -90,9 +93,6 @@ namespace tickets.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
