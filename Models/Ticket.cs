@@ -47,6 +47,8 @@ public class Ticket
         }
     }
 
+    public DateTime Created { get; private set; } = DateTime.Now;
+
     public Guid EmployeeId { get; private set; }
 
     public Employee Employee { get; private set; } = null!;
