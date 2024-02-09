@@ -16,7 +16,7 @@ public class GetAllEmployees
 
         public string Title { get; private set; } = string.Empty;
 
-        public Guid TeamId { get; private set; }
+        public string TeamName { get; private set; } = string.Empty;
 
         public ICollection<TicketResult> Tickets { get; private set; } = new List<TicketResult>();
     }
