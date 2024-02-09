@@ -12,23 +12,26 @@
 }
 else
 {
-    <h3>Employee Details</h3>
+    <section class="px-5">
+        <h1 class="mb-3">Employee Details</h1>
 
-    <span class="d-block">Employee Id: @Id</span>
-    <span class="d-block">Name: @employee.FullName</span>
-    <span class="d-block">Title: @employee.Title</span>
-    <span class="d-block">TeamId: @employee.TeamId</span>
+        <img src="@($"https://fakeimg.pl/200x200/94bbe9/eeaeca?text={GetInitals(employee.FullName)}")" class="rounded-circle mb-3" />
 
-    <br />
+        <span class="d-block">Name: @employee.FullName</span>
+        <span class="d-block">Title: @employee.Title</span>
+        <span class="d-block">Belongs to: @employee.TeamName</span>
 
-    <h4>Tickets</h4>
-    @foreach(var ticket in employee.Tickets)
-    {
-        <span class="d-block">Ticket Id: @ticket.Id</span>
-        <span class="d-block">Title: @ticket.Title</span>
-        <span class="d-block">Description: @ticket.Description</span>
-        <span class="d-block">Status: @ticket.Status</span>
-    }
+        <br />
+
+        <h4>Tickets</h4>
+        @foreach (var ticket in employee.Tickets)
+        {
+            <span class="d-block">Ticket Id: @ticket.Id</span>
+            <span class="d-block">Title: @ticket.Title</span>
+            <span class="d-block">Description: @ticket.Description</span>
+            <span class="d-block">Status: @ticket.Status</span>
+        }
+    </section>    
 }
 
 @code {
@@ -43,5 +46,15 @@ else
         {
             Id = Id
         });
+    }
+
+    private string GetInitals(string name)
+    {
+        var splitName = name.Split(" ");
+
+        var firstName = splitName[0].Remove(1);
+        var lastName = splitName[1].Remove(1);
+
+        return $"{firstName} . {lastName}";
     }
 }

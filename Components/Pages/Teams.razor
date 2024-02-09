@@ -18,20 +18,20 @@ else
         <table class="table table-striped table-hover">
             <thead class="bg-dark text-white table-responsive border-top border-start border-end border-dark">
                 <tr>
-                    <th>Id</th>
+                    <th>Name</th>
                     <th>Total Members</th>
                     <th>Total Tickets</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var team in teams)
+                @foreach (var team in teams.OrderBy(x => x.Name))
                 {
                     var totalTickets = 0;
 
                     <tr class="table-responsive border-top border-start border-end">
                         <td>
                             <NavLink href="@($"/teams/{team.Id}")" class="text-decoration-none link-dark">
-                                @team.Id
+                                @team.Name
                             </NavLink>
                         </td>
                         <td>@team.Members.Count()</td>                        
