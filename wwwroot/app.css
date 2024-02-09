@@ -1,5 +1,5 @@
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: "Rubik", sans-serif;
 }
 
 a, .btn-link {
@@ -52,4 +52,13 @@ h1:focus {
 
 .table {
     margin-bottom: 0px;
+}
+
+.employees-table-row:hover {
+    cursor: pointer;
+}
+
+.employees-table-head {
+    background-color: #eeaeca;
+    border-color: #eeaeca !important;
 }
