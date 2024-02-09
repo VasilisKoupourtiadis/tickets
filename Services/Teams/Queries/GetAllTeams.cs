@@ -12,6 +12,8 @@ public class GetAllTeams
     {
         public Guid Id { get; set; }
 
+        public string Name { get; set; } = string.Empty;
+
         public ICollection<EmployeeResult> Members { get; set; } = new List<EmployeeResult>();
     }
 
