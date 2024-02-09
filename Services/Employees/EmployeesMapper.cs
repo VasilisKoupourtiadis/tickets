@@ -8,11 +8,13 @@ public class EmployeesMapper : Profile
 {
     public EmployeesMapper()
     {
-        CreateMap<Employee, GetAllEmployees.EmployeesResult>();
+        CreateMap<Employee, GetAllEmployees.EmployeesResult>()
+            .ForMember(dest => dest.TeamName, opt => opt.MapFrom(x => x.Team.Name));
 
         CreateMap<Ticket, GetAllEmployees.TicketResult>();
 
-        CreateMap<Employee, GetEmployee.EmployeeResult>();
+        CreateMap<Employee, GetEmployee.EmployeeResult>()
+            .ForMember(dest => dest.TeamName, opt => opt.MapFrom(x => x.Team.Name));
 
         CreateMap<Ticket, GetEmployee.TicketResult>();
     }
