@@ -17,20 +17,39 @@ else
 
         <img src="@($"https://fakeimg.pl/200x200/94bbe9/eeaeca?text={GetInitals(employee.FullName)}")" class="rounded-circle mb-3" />
 
-        <span class="d-block">Name: @employee.FullName</span>
-        <span class="d-block">Title: @employee.Title</span>
-        <span class="d-block">Belongs to: @employee.TeamName</span>
+        <div>
+            <span class="fw-bold">Name: </span> @employee.FullName
+        </div>
+        <div>
+            <span class="fw-bold">Title: </span> @employee.Title
+        </div>
+        <div class="mb-4">
+            <span class="fw-bold">Belongs to: </span> @employee.TeamName
+        </div>       
 
-        <br />
+        <h2 class="mb-4">Tickets (@employee.Tickets.Count())</h2>
 
-        <h4>Tickets</h4>
-        @foreach (var ticket in employee.Tickets)
-        {
-            <span class="d-block">Ticket Id: @ticket.Id</span>
-            <span class="d-block">Title: @ticket.Title</span>
-            <span class="d-block">Description: @ticket.Description</span>
-            <span class="d-block">Status: @ticket.Status</span>
-        }
+        <section class="row row-cols-5 gap-5">
+            @foreach (var ticket in employee.Tickets)
+            {
+                <div class="card rounded g-0">
+                    <a href="@($"/tickets/{ticket.Id}")" class="text-decoration-none text-white">
+                        <div class="card-header fw-bold border-bottom-0 pb-0 fs-5">@ticket.Title.ToUpper()</div>
+                        <div class="card-body rounded-bottom">
+                            <div class="mb-3">
+                                <span class="fw-bold">Description: </span> @ticket.Description
+                            </div>
+                            <div class="mb-3">
+                                <span class="fw-bold">Status: </span> @ticket.Status
+                            </div>
+                            <div>
+                                <span class="fw-bold">Created by: </span> @employee.FullName
+                            </div>
+                        </div>
+                    </a>
+                </div>               
+            }
+        </section>        
     </section>    
 }
 
