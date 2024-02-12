@@ -17,6 +17,8 @@ public class GetAllTickets
 
         public string Status { get; set; } = string.Empty;
 
+        public string Created { get; set; } = string.Empty;
+
         public EmployeeResult Employee { get; set; } = new EmployeeResult();
     }
 
