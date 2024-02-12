@@ -32,21 +32,26 @@ else
         <section class="row row-cols-5 gap-5">
             @foreach (var ticket in employee.Tickets)
             {
-                <div class="card rounded g-0">
-                    <a href="@($"/tickets/{ticket.Id}")" class="text-decoration-none text-white">
-                        <div class="card-header fw-bold border-bottom-0 pb-0 fs-5">@ticket.Title.ToUpper()</div>
-                        <div class="card-body rounded-bottom">
-                            <div class="mb-3">
-                                <span class="fw-bold">Description: </span> @ticket.Description
-                            </div>
-                            <div class="mb-3">
-                                <span class="fw-bold">Status: </span> @ticket.Status
-                            </div>
-                            <div>
-                                <span class="fw-bold">Created by: </span> @employee.FullName
-                            </div>
+                <div class="card text-white rounded g-0">
+                    <div class="card-header fw-bold border-bottom-0 pb-0 fs-5">
+                        <NavLink href="@($"/tickets/{ticket.Id}")" class="text-decoration-none text-white">
+                            @ticket.Title.ToUpper()
+                        </NavLink>
+                    </div>
+                    <div class="card-body rounded-bottom">
+                        <div class="mb-3">
+                            <span class="fw-bold">Description: </span> @ticket.Description
                         </div>
-                    </a>
+                        <div class="mb-3">
+                            <span class="fw-bold">Status: </span> @ticket.Status
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">Created: </span> @ticket.Created
+                        </div>
+                        <div>
+                            <span class="fw-bold">Created by: </span> @employee.FullName
+                        </div>
+                    </div>                    
                 </div>               
             }
         </section>        
