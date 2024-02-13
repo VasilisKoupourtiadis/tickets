@@ -25,4 +25,11 @@ public class TicketService : ITicketService
         await context.Tickets
         .Include(x => x.Employee)
         .ToListAsync();
+
+    public async Task<ICollection<Ticket>> GetRecentlyAddedTicketsAsync() =>
+        await context.Tickets
+        .Include(x => x.Employee)
+        .Take(5)
+        .OrderByDescending(x => x.Created)
+        .ToListAsync();
 }

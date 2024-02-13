@@ -7,5 +7,6 @@ namespace tickets.Services.Tickets
         void AddTicket(Ticket ticket);
         Task<Ticket> GetTicketAsync(Guid Id);
         Task<ICollection<Ticket>> GetTicketsAsync();
+        Task<ICollection<Ticket>> GetRecentlyAddedTicketsAsync();
     }
 }
