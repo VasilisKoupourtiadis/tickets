@@ -12,5 +12,10 @@ public class TicketsMapper : Profile
             .ForMember(dest => dest.Created, opt => opt.MapFrom(x => x.Created.ToString("dd MMM yyyy, HH:mm")));
 
         CreateMap<Employee, GetAllTickets.EmployeeResult>();
+
+        CreateMap<Ticket, GetTicket.TicketResult>()
+            .ForMember(dest => dest.Created, opt => opt.MapFrom(x => x.Created.ToString("dd MMM yyyy, HH:mm")));
+
+        CreateMap<Employee, GetTicket.EmployeeResult>();
     }
 }

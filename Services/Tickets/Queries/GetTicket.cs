@@ -3,14 +3,14 @@ using MediatR;
 
 namespace tickets.Services.Tickets.Queries;
 
-public class GetAllTickets
+public class GetTicket
 {
-    public class GetAllTicketsQuery : IRequest<ICollection<TicketsResult>> 
-    { 
-        public int? Amount { get; set; }
+    public class GetTicketQuery : IRequest<TicketResult>
+    {
+        public Guid Id { get; set; }
     }
 
-    public class TicketsResult
+    public class TicketResult
     {
         public Guid Id { get; set; }
 
@@ -34,7 +34,7 @@ public class GetAllTickets
         public string Title { get; private set; } = string.Empty;
     }
 
-    public class Handler : IRequestHandler<GetAllTicketsQuery, ICollection<TicketsResult>> 
+    public class Handler : IRequestHandler<GetTicketQuery, TicketResult>
     {
         private readonly IServiceManager serviceManager;
 
@@ -46,13 +46,11 @@ public class GetAllTickets
             this.mapper = mapper;
         }
 
-        public async Task<ICollection<TicketsResult>> Handle(GetAllTicketsQuery request, CancellationToken cancellationToken)
+        public async Task<TicketResult> Handle(GetTicketQuery request, CancellationToken cancellationToken)
         {
-            var tickets = request.Amount is null 
-                ? await serviceManager.TicketService.GetTicketsAsync()
-                : await serviceManager.TicketService.GetRecentlyAddedTicketsAsync();
+            var ticket = await serviceManager.TicketService.GetTicketAsync(request.Id);
 
-            var result = mapper.Map<ICollection<TicketsResult>>(tickets);
+            var result = mapper.Map<TicketResult>(ticket);
 
             return result;
         }
