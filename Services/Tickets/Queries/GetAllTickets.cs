@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using tickets.Models;
 
 namespace tickets.Services.Tickets.Queries;
 
@@ -8,6 +9,8 @@ public class GetAllTickets
     public class GetAllTicketsQuery : IRequest<ICollection<TicketsResult>> 
     { 
         public int? Amount { get; set; }
+
+        public Guid? Id { get; set; }
     }
 
     public class TicketsResult
@@ -48,9 +51,23 @@ public class GetAllTickets
 
         public async Task<ICollection<TicketsResult>> Handle(GetAllTicketsQuery request, CancellationToken cancellationToken)
         {
-            var tickets = request.Amount is null 
-                ? await serviceManager.TicketService.GetTicketsAsync()
-                : await serviceManager.TicketService.GetRecentlyAddedTicketsAsync();
+            if (request.Id is not null && request.Amount is not null)
+                throw new Exception("Both paramets cannot contain a value");
+
+            ICollection<Ticket> tickets = null;            
+
+            if(request.Amount is not null)
+            {
+                tickets = await serviceManager.TicketService.GetRecentlyAddedTicketsAsync();
+            }
+            else if (request.Id is not null)
+            {
+                tickets = await serviceManager.TicketService.GetTicketsByTeamAsync(request.Id.GetValueOrDefault());
+            }
+            else
+            {
+                tickets = await serviceManager.TicketService.GetTicketsAsync();
+            }
 
             var result = mapper.Map<ICollection<TicketsResult>>(tickets);
 

@@ -32,4 +32,10 @@ public class TicketService : ITicketService
         .Take(5)
         .OrderByDescending(x => x.Created)
         .ToListAsync();
+
+    public async Task<ICollection<Ticket>> GetTicketsByTeamAsync(Guid id) =>
+        await context.Tickets
+        .Include(x => x.Employee)
+        .Where(x => x.Employee.TeamId.Equals(id))
+        .ToListAsync();
 }

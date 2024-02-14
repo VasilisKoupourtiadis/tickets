@@ -8,5 +8,6 @@ namespace tickets.Services.Tickets
         Task<Ticket> GetTicketAsync(Guid Id);
         Task<ICollection<Ticket>> GetTicketsAsync();
         Task<ICollection<Ticket>> GetRecentlyAddedTicketsAsync();
+        Task<ICollection<Ticket>> GetTicketsByTeamAsync(Guid id);
     }
 }
