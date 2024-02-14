@@ -30,7 +30,10 @@ else
                 <span class="fw-bold">Created: </span> @ticket.Created
             </div>
             <div>
-                <span class="fw-bold">Created By: </span> @ticket.Employee.FullName
+                <span class="fw-bold">Created By: </span>
+                <NavLink href="@($"/employees/{ticket.Employee.Id}")" class="text-decoration-none employee-detail-link">
+                    @ticket.Employee.FullName
+                </NavLink>                
             </div>
         </section>
         

@@ -1,7 +1,9 @@
 ﻿@page "/teams/{id:guid}"
 @using static tickets.Services.Teams.Queries.GetTeam
+@using static tickets.Services.Tickets.Queries.GetAllTickets
 @inject IServiceManager serviceManager
 @inject IMediator mediator
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 
 <PageTitle>Details</PageTitle>
@@ -12,25 +14,47 @@
 }
 else
 {
-    <h3>Team Details</h3>
-    <span class="d-block">Id: @Id</span>
+    <section class="px-5">
+        <h1 class="mb-5">Team Details</h1>
 
-    <h3>Members</h3>
-    @foreach (var member in team.Members)
-    {
-        <span class="d-block">Employee Id: @Id</span>
-        <span class="d-block">Name: @member.FullName</span>
-        <span class="d-block">Title: @member.Title</span>
+        <section class="mb-5">
+            <div>
+                <span class="fw-bold">Id: </span> @team.Id
+            </div>
+            <div>
+                <span class="fw-bold">Name: </span> @team.Name
+            </div>
+        </section>
 
-        <h4>Tickets</h4>
-        foreach (var ticket in member.Tickets)
-        {
-            <span class="d-block">Ticket Id: @ticket.Id</span>
-            <span class="d-block">Title: @ticket.Title</span>
-            <span class="d-block">Description: @ticket.Description</span>
-            <span class="d-block">Status: @ticket.Status</span>
-        }
-    }
+        <h2 class="mb-3">Members (@team.Members.Count())</h2>
+        <section class="d-flex justify-content-center row row-cols-6 gap-5 mx-0 mb-5">
+            @foreach (var member in team.Members)
+            {
+                <div class="card text-white rounded g-0">
+                    <div class="d-flex justify-content-center">
+                        <NavLink href="@($"/employees/{member.Id}")">
+                            <img src="@($"https://fakeimg.pl/325/94bbe9/eeaeca?text={GetInitals(member.FullName)}")" class="w-100 rounded rounded-top rounded-bottom mb-3" />
+                        </NavLink>
+                    </div>
+                    <div class="card-body rounded-top rounded-bottom">                                                
+                        <div class="mb-3">
+                            <span class="fw-bold">Name: </span> @member.FullName
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">Title: </span> @member.Title
+                        </div>
+                        <div>
+                            <span class="fw-bold">Tickets created: </span> @member.Tickets.Count()
+                        </div>                        
+                    </div>
+                </div>                
+            }            
+        </section>
+        <h2 class="mb-3">Tickets (@tickets.Count())</h2>
+        <section class="d-flex justify-content-center row row-cols-5 gap-5 mx-0 mb-5">
+            
+        </section>
+    </section>
 }
 
 @code {
@@ -39,11 +63,28 @@ else
 
     private TeamResult? team;
 
+    private ICollection<TicketsResult>? tickets;
+
     protected override async Task OnInitializedAsync()
     {
         team = await mediator.Send(new GetTeamQuery()
         {
             Id = Id
         });
+
+        tickets = await mediator.Send(new GetAllTicketsQuery()
+        {
+            Id = team.Id
+        });
     }
+
+    private string GetInitals(string name)
+    {
+        var splitName = name.Split(" ");
+
+        var firstName = splitName[0].Remove(1);
+        var lastName = splitName[1].Remove(1);
+
+        return $"{firstName} . {lastName}";
+    }    
 }

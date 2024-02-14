@@ -78,3 +78,11 @@ h1:focus {
     text-decoration-line: underline;
     text-decoration-thickness: 3px;
 }
+
+.employee-detail-link {
+    color: #eeaeca
+}
+
+    .employee-detail-link:hover {
+        color: #94bbe9
+    }
