@@ -27,33 +27,52 @@ else
         </section>
 
         <h2 class="mb-3">Members (@team.Members.Count())</h2>
-        <section class="d-flex justify-content-center row row-cols-6 gap-5 mx-0 mb-5">
-            @foreach (var member in team.Members)
-            {
-                <div class="card text-white rounded g-0">
-                    <div class="d-flex justify-content-center">
-                        <NavLink href="@($"/employees/{member.Id}")">
-                            <img src="@($"https://fakeimg.pl/325/94bbe9/eeaeca?text={GetInitals(member.FullName)}")" class="w-100 rounded rounded-top rounded-bottom mb-3" />
-                        </NavLink>
-                    </div>
-                    <div class="card-body rounded-top rounded-bottom">                                                
-                        <div class="mb-3">
-                            <span class="fw-bold">Name: </span> @member.FullName
-                        </div>
-                        <div class="mb-3">
-                            <span class="fw-bold">Title: </span> @member.Title
-                        </div>
-                        <div>
-                            <span class="fw-bold">Tickets created: </span> @member.Tickets.Count()
-                        </div>                        
-                    </div>
-                </div>                
-            }            
-        </section>
+        <div class="table-responsive rounded w-50 mb-5">
+            <table class="table table-striped table-hover">
+                <thead class="text-white table-responsive border-top border-start border-end employees-table-head">
+                    <tr>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th class="text-center">Tickets Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var member in team.Members)
+                    {
+                        <tr class="table-responsive border-top border-start border-end employees-table-row" @onclick="@(() => Navigation.NavigateTo($"/employees/{member.Id}"))">
+                            <td>@member.FullName</td>
+                            <td>@member.Title</td>
+                            <td class="text-center">@member.Tickets.Count()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
         <h2 class="mb-3">Tickets (@tickets.Count())</h2>
-        <section class="d-flex justify-content-center row row-cols-5 gap-5 mx-0 mb-5">
-            
-        </section>
+        <div class="table-responsive rounded mb-5 w-50">
+            <table class="table table-striped table-hover">
+                <thead class="text-white table-responsive border-top border-start border-end employees-table-head">
+                    <tr>
+                        <th>Status</th>
+                        <th>Title</th>
+                        <th>Created</th>
+                        <th>Created by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in tickets)
+                    {
+                        <tr class="table-responsive border-top border-start border-end employees-table-row" @onclick="@(() => Navigation.NavigateTo($"/tickets/{ticket.Id}"))">
+                            <td>@ticket.Status</td>
+                            <td>@ticket.Title</td>
+                            <td>@ticket.Created</td>
+                            <td>@ticket.Employee.FullName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </section>
 }
 
