@@ -86,3 +86,17 @@ h1:focus {
     .employee-detail-link:hover {
         color: #94bbe9
     }
+
+.update-ticket-button {
+    color: #fff;
+    background: linear-gradient(270deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    border-color: #fff;
+    transition: 0.3s;
+}
+
+    .update-ticket-button:hover {
+        background-color: #fff;
+        border-color: #fff;
+        color: #fff;
+        opacity: 0.7;        
+    }

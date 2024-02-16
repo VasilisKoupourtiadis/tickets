@@ -38,18 +38,25 @@ else
                             @ticket.Title.ToUpper()
                         </NavLink>
                     </div>
-                    <div class="card-body rounded-bottom">
-                        <div class="mb-3">
-                            <span class="fw-bold">Description: </span> @ticket.Description
+                    <div class="d-flex flex-column justify-content-between card-body rounded-bottom">
+                        <div class="d-flex flex-column justify-content-evenly">
+                            <div class="mb-3">
+                                <span class="fw-bold">Description: </span> @ticket.Description
+                            </div>
+                            <div class="mb-3">
+                                <span class="fw-bold">Status: </span> @ticket.Status
+                            </div>
+                            <div class="mb-3">
+                                <span class="fw-bold">Created: </span> @ticket.Created
+                            </div>
+                            <div class="mb-3">
+                                <span class="fw-bold">Created by: </span> @employee.FullName
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <span class="fw-bold">Status: </span> @ticket.Status
-                        </div>
-                        <div class="mb-3">
-                            <span class="fw-bold">Created: </span> @ticket.Created
-                        </div>
-                        <div>
-                            <span class="fw-bold">Created by: </span> @employee.FullName
+                        <div class="text-center">
+                            <NavLink href="@($"/tickets/update/{ticket.Id}")" class="text-decoration-none text-white">
+                                <button class="btn update-ticket-button w-100">Update Status</button>
+                            </NavLink>                            
                         </div>
                     </div>                    
                 </div>               
