@@ -54,10 +54,7 @@ else
                             <div class="mb-3">
                                 <span class="fw-bold">Created by: </span> @employee.FullName
                             </div>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn update-ticket-button w-100" @onclick="() => UpdateStatus(ticket)">Update Status</button>
-                        </div>
+                        </div>                        
                     </div>                    
                 </div>               
             }
@@ -87,16 +84,5 @@ else
         var lastName = splitName[1].Remove(1);
 
         return $"{firstName} . {lastName}";
-    }
-
-    private async void UpdateStatus(TicketResult ticket)
-    {
-        await mediator.Send(new UpdateTicketStatusCommand()
-        {
-            Id = ticket.Id,
-            Status = ticket.Status
-        });
-
-        Navigation.NavigateTo($"/employees/{ticket.Id}");
     }
 }

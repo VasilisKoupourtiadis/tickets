@@ -1,8 +1,10 @@
 ﻿@page "/tickets/{id:guid}"
 @using static tickets.Services.Tickets.Queries.GetTicket
 @using static tickets.Services.Tickets.Queries.GetAllTickets
+@using static tickets.Services.Tickets.Commands.UpdateTicketStatus
 @inject IServiceManager serviceManager
 @inject IMediator mediator
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 
 <PageTitle>Details</PageTitle>
@@ -17,23 +19,29 @@ else
         <h1 class="mb-5">Ticket Details</h1>
 
         <section class="mb-5">
-            <div>
+            <div class="mb-2">
                 <span class="fw-bold">Id: </span> @ticket.Id
             </div>
-            <div>
+            <div class="mb-2">
                 <span class="fw-bold">Title: </span> @ticket.Title
             </div>
-            <div>
+            <div class="mb-2">
                 <span class="fw-bold">Description: </span> @ticket.Description
             </div>
-            <div>
+            <div class="mb-2">
+                <span class="fw-bold">Status: </span> @ticket.Status
+            </div>
+            <div class="mb-2">
                 <span class="fw-bold">Created: </span> @ticket.Created
             </div>
-            <div>
+            <div class="mb-2">
                 <span class="fw-bold">Created By: </span>
                 <NavLink href="@($"/employees/{ticket.Employee.Id}")" class="text-decoration-none employee-detail-link">
                     @ticket.Employee.FullName
                 </NavLink>                
+            </div>
+            <div class="mb-5">
+                <button class="btn update-ticket-button btn-dark" @onclick="() => UpdateStatus(ticket)">Update Status</button>
             </div>
         </section>
         
@@ -61,12 +69,7 @@ else
                             <div class="mb-3">
                                 <span class="fw-bold">Created by: </span> @ticket.Employee.FullName
                             </div>
-                        </div>                        
-                        <div class="text-center">
-                            <NavLink href="@($"/tickets/update/{ticket.Id}")" class="text-decoration-none text-white">
-                                <button class="btn update-ticket-button btn-dark w-100">Update Status</button>
-                            </NavLink>
-                        </div>
+                        </div>                                                
                     </div>
                 </div>
             }
@@ -93,5 +96,16 @@ else
         {
             Amount = 5
         });
+    }
+
+    private async void UpdateStatus(TicketResult ticket)
+    {
+        await mediator.Send(new UpdateTicketStatusCommand()
+            {
+                Id = ticket.Id,
+                Status = ticket.Status
+            });
+
+        Navigation.NavigateTo($"/employees/{ticket.Id}");
     }
 }
