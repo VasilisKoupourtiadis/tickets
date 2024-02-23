@@ -1,40 +1,48 @@
 ﻿using AutoMapper;
 using MediatR;
+using static tickets.Services.Tickets.Queries.GetTicket;
 
 namespace tickets.Services.Tickets.Commands;
 
 public class UpdateTicketStatus
 {
-    public class UpdateTicketStatusCommand : IRequest<Unit> 
+    public class UpdateTicketStatusCommand : IRequest<TicketResult> 
     { 
         public Guid Id { get; set; }
 
         public string Status { get; set; } = string.Empty;
-    }
+    }    
 
-    public class Handler : IRequestHandler<UpdateTicketStatusCommand, Unit>
+    public class Handler : IRequestHandler<UpdateTicketStatusCommand, TicketResult>
     {
         private readonly IServiceManager serviceManager;
 
-        public Handler(IServiceManager serviceManager)
+        private readonly IMapper mapper;
+
+        public Handler(IServiceManager serviceManager, IMapper mapper)
         {
             this.serviceManager = serviceManager;
+            this.mapper = mapper;
         }
 
-        public async Task<Unit> Handle(UpdateTicketStatusCommand request, CancellationToken cancellationToken)
+        public async Task<TicketResult> Handle(UpdateTicketStatusCommand request, CancellationToken cancellationToken)
         {
             var ticket = await serviceManager.TicketService.GetTicketAsync(request.Id);
 
-            if(request.Status.ToLower() == "active")
+            if (request.Status.ToLower() == "active")
             {
                 ticket.SetClosedStatus();
             }
-
-            ticket.SetActiveStatus();
-
+            else if (request.Status.ToLower() == "pending")
+            {
+                ticket.SetActiveStatus();
+            }
+           
             await serviceManager.SaveAsync();
 
-            return Unit.Value;
+            var result = mapper.Map<TicketResult>(ticket);
+
+            return result;
         }
     }
 }
