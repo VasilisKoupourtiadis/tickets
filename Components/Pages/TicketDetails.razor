@@ -40,9 +40,14 @@ else
                     @ticket.Employee.FullName
                 </NavLink>                
             </div>
-            <div class="mb-5">
-                <button class="btn update-ticket-button btn-dark" @onclick="() => UpdateStatus(ticket)">Update Status</button>
-            </div>
+            @if (ticket.Status.ToLower() != "closed")
+            {
+                <div class="mb-5">
+                    <button class="btn update-ticket-button" @onclick="() => UpdateStatus(ticket.Id, ticket.Status)">
+                        Update Status
+                    </button>
+                </div>
+            }            
         </section>
         
         <h2 class="mb-3">Recently added tickets</h2>
@@ -81,7 +86,7 @@ else
     [Parameter]
     public Guid Id { get; set; }
 
-    private TicketResult? ticket;
+    private Services.Tickets.Queries.GetTicket.TicketResult? ticket;
 
     private ICollection<TicketsResult>? tickets;
 
@@ -98,14 +103,16 @@ else
         });
     }
 
-    private async void UpdateStatus(TicketResult ticket)
+    private async void UpdateStatus(Guid id, string status)
     {
-        await mediator.Send(new UpdateTicketStatusCommand()
-            {
-                Id = ticket.Id,
-                Status = ticket.Status
-            });
+        var result = await mediator.Send(new UpdateTicketStatusCommand()
+        {
+            Id = id,
+            Status = status
+        });
 
-        Navigation.NavigateTo($"/employees/{ticket.Id}");
-    }
+        ticket = result;
+
+        StateHasChanged();
+    }    
 }
