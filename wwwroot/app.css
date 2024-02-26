@@ -100,3 +100,39 @@ h1:focus {
         color: #fff;
         opacity: 0.7;        
     }
+
+.pointer {
+    cursor: pointer;
+}
+
+.dropdown-menu-pink {
+    color: #fff;
+    background: linear-gradient(270deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    border-color: #fff;
+}
+.dropdown-item {
+    color: #fff;
+    background: linear-gradient(270deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    border-color: #fff;
+    transition: 0.3s;
+}
+
+    .dropdown-item:hover {
+        background-color: #fff;
+        border-color: #fff;
+        color: #fff;
+        opacity: 0.7;
+    }
+
+.home-table-nav-button {
+    color: #fff;
+    background: linear-gradient(270deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    border-color: #fff;
+    transition: 0.3s;
+}
+    .home-table-nav-button:hover {
+        background-color: #fff;
+        border-color: #fff;
+        color: #fff;
+        opacity: 0.7;
+    }

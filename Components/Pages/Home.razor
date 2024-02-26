@@ -1,92 +1,51 @@
 ﻿@page "/"
-@inject IServiceManager serviceManager;
+@using static tickets.Services.Teams.Queries.GetAllTeams
+@inject IServiceManager serviceManager
+@inject IMediator mediator
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-@if(teams is null || employees is null)
+@if(teams is null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <h1>Here are our teams!</h1>
+    <section class="px-5 mb-5">
+        <h1 class="mb-3">Overview</h1>
 
-    foreach(var team in teams)
-    {
-        <h1 class="text-decoration-underline">@team.Id</h1>
-
-        foreach(var member in team.Members)
-        {
-            <h2 class="text-decoration-underline px-3">@member.FullName</h2>
-            <span class="d-block px-3">@member.Title</span>
-
-            foreach(var ticket in member.Tickets)
-            {
-                <h3 class="text-decoration-underline px-3">@ticket.Title</h3>
-                <span class="d-block px-3">@ticket.Description</span>
-                <span class="d-block px-3">@ticket.Status</span>
-            }
-        }
-    }
-
-    <button class="btn btn-dark" @onclick="AddEmployee">Add employee</button>
-    <button class="btn btn-dark" @onclick="AddTicket">Add ticket</button>
-}
-@if (Employee is not null)
-{
-    <span class="d-block">Id: @Employee.Id</span>
-    <span class="d-block">Name: @Employee.FullName</span>
-    <span class="d-block">Title: @Employee.Title</span>
-    <span class="d-block">TeamId: @Employee.TeamId</span>
-}
-@if (Ticket is not null)
-{
-    <span class="d-block">Id: @Ticket.Id</span>
-    <span class="d-block">Title: @Ticket.Title</span>
-    <span class="d-block">Description: @Ticket.Description</span>
-    <span class="d-block">EmployeeId: @Ticket.Employee.FullName</span>
+        <section class="d-flex flex-row gap-3">
+            <div class="dropdown">
+                <button class="btn home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Teams
+                </button>
+                <ul class="dropdown-menu dropdown-menu-pink">
+                    @foreach(var team in teams.OrderBy(x => x.Name))
+                    {
+                        <li class="dropdown-item pointer">@team.Name</li>
+                    }
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Status
+                </button>
+                <ul class="dropdown-menu dropdown-menu-pink">
+                    <li class="dropdown-item pointer">Active</li>
+                    <li class="dropdown-item pointer">Pending</li>
+                    <li class="dropdown-item pointer">Closed</li>
+                </ul>
+            </div>
+        </section>
+    </section>
 }
 
 @code {
-    private ICollection<Team>? teams;
-
-    private ICollection<Employee>? employees;
-
-    private Employee? Employee;
-
-    private Ticket? Ticket;
+    private ICollection<TeamsResult>? teams;
 
     protected override async Task OnInitializedAsync()
     {
-        teams = await serviceManager.TeamService.GetTeamsAsync();
-
-        employees = await serviceManager.EmployeeService.GetEmployeesAsync();
-    }
-
-    private async Task AddEmployee()
-    {
-        var team = teams.FirstOrDefault(x => x.Id == Guid.Parse("8059ce3c-6f3f-4ba1-8b48-e1e00a10c527"));
-
-        var employee = new Employee("Jessica Pearson", "Name Partner", team);
-
-        serviceManager.EmployeeService.AddEmployee(employee);
-
-        await serviceManager.SaveAsync();
-
-        Employee = employee;
-    }
-
-    private async Task AddTicket()
-    {
-        var employee = employees.FirstOrDefault(x => x.Id == Guid.Parse("B508BDF3-E570-4252-A6D9-51374031EAA8"));
-
-        var ticket = new Ticket("Computer", "My computer won't turn on", employee);
-
-        serviceManager.TicketService.AddTicket(ticket);
-
-        await serviceManager.SaveAsync();
-
-        Ticket = ticket;
+        teams = await mediator.Send(new GetAllTeamsQuery());
     }
 }
