@@ -18,23 +18,24 @@ else
         <section class="d-flex flex-row gap-3">
             <div class="dropdown">
                 <button class="btn home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Teams
+                    @ActiveTeam
                 </button>
                 <ul class="dropdown-menu dropdown-menu-pink">
                     @foreach(var team in teams.OrderBy(x => x.Name))
                     {
-                        <li class="dropdown-item pointer">@team.Name</li>
+                        <li class="dropdown-item pointer" @onclick="@(() => UpdateDropdownTeam(team.Name))">@team.Name</li>
                     }
                 </ul>
             </div>
             <div class="dropdown">
                 <button class="btn home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Status
+                    @SelectedStatus
                 </button>
                 <ul class="dropdown-menu dropdown-menu-pink">
-                    <li class="dropdown-item pointer">Active</li>
-                    <li class="dropdown-item pointer">Pending</li>
-                    <li class="dropdown-item pointer">Closed</li>
+                    @foreach(var status in Statuses)
+                    {
+                        <li class="dropdown-item pointer" @onclick="@(() => UpdateDropdownStatus(status))">@status</li>
+                    }
                 </ul>
             </div>
         </section>
@@ -44,8 +45,28 @@ else
 @code {
     private ICollection<TeamsResult>? teams;
 
+    private string? ActiveTeam;
+
+    private string? SelectedStatus;
+
+    private ICollection<String> Statuses = ["Active", "Pending", "Closed"];
+
     protected override async Task OnInitializedAsync()
     {
         teams = await mediator.Send(new GetAllTeamsQuery());
+
+        ActiveTeam = teams.FirstOrDefault(x => x.Name.Contains("#1")).Name;
+
+        SelectedStatus = Statuses.FirstOrDefault(x => x.Contains("Active"));
+    }
+
+    private void UpdateDropdownTeam(string team)
+    {
+        ActiveTeam = team;
+    }
+
+    private void UpdateDropdownStatus(string status)
+    {
+        SelectedStatus = status;
     }
 }
