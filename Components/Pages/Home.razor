@@ -2,11 +2,12 @@
 @using static tickets.Services.Teams.Queries.GetAllTeams
 @inject IServiceManager serviceManager
 @inject IMediator mediator
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-@if(teams is null)
+@if(Teams is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -15,20 +16,20 @@ else
     <section class="px-5 mb-5">
         <h1 class="mb-3">Overview</h1>
 
-        <section class="d-flex flex-row gap-3">
+        <section class="d-flex flex-row gap-3 mb-3">
             <div class="dropdown">
-                <button class="btn home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn px-3 py-2 home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     @ActiveTeam
                 </button>
                 <ul class="dropdown-menu dropdown-menu-pink">
-                    @foreach(var team in teams.OrderBy(x => x.Name))
+                    @foreach(var team in Teams.OrderBy(x => x.Name))
                     {
                         <li class="dropdown-item pointer" @onclick="@(() => UpdateDropdownTeam(team.Name))">@team.Name</li>
                     }
                 </ul>
             </div>
             <div class="dropdown">
-                <button class="btn home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn px-3 py-2 home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     @SelectedStatus
                 </button>
                 <ul class="dropdown-menu dropdown-menu-pink">
@@ -39,11 +40,41 @@ else
                 </ul>
             </div>
         </section>
+        @if(Tickets.Count != 0)
+        {
+            <div class="table-responsive rounded">
+                <table class="table table-striped table-hover">
+                    <thead class="text-white table-responsive border-top border-start border-end employees-table-head">
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Created By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Tickets)
+                        {
+                            <tr class="table-responsive border-top border-start border-end employees-table-row" @onclick="@(() => Navigation.NavigateTo($"/tickets/{ticket.Id}"))">
+                                <td>@ticket.Title</td>
+                                <td>@ticket.Description</td>
+                                <td>@ticket.Status</td>
+                                <td>@ticket.Created</td>
+                                <td>@ticket.CreatedBy</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }        
     </section>
 }
 
 @code {
-    private ICollection<TeamsResult>? teams;
+    private ICollection<TeamsResult>? Teams;
+
+    private ICollection<TicketResult>? Tickets;
 
     private string? ActiveTeam;
 
@@ -53,20 +84,52 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        teams = await mediator.Send(new GetAllTeamsQuery());
+        Teams = await mediator.Send(new GetAllTeamsQuery());
 
-        ActiveTeam = teams.FirstOrDefault(x => x.Name.Contains("#1")).Name;
+        ActiveTeam = Teams.FirstOrDefault(x => x.Name.Contains("#1")).Name;
 
         SelectedStatus = Statuses.FirstOrDefault(x => x.Contains("Active"));
+
+        SortedTickets(ActiveTeam, SelectedStatus);
     }
 
     private void UpdateDropdownTeam(string team)
     {
         ActiveTeam = team;
+
+        SortedTickets(ActiveTeam, SelectedStatus);
     }
 
     private void UpdateDropdownStatus(string status)
     {
         SelectedStatus = status;
+
+        SortedTickets(ActiveTeam, SelectedStatus);
+    }
+
+    private void SortedTickets(string activeTeam, string selectedStatus)
+    {
+        var team = Teams.FirstOrDefault(x => x.Name.ToLower() == ActiveTeam.ToLower());
+
+        var tickets = new List<TicketResult>();
+
+        foreach (var employee in team.Members)
+        {
+            var matchedTickets = employee.Tickets.ToList();
+
+            matchedTickets.ForEach(item => tickets.Add(item));
+
+            // var matchedTickets = employee.Tickets
+            //     .Where(x => x.Status.ToLower() == SelectedStatus.ToLower())
+            //     .ToList();
+
+            // if (matchedTickets.Count != 0)
+            // {
+            //     matchedTickets.ForEach(item => tickets.Add(item));
+            //     tickets = matchedTickets;
+            // }
+        }
+
+        Tickets = tickets;
     }
 }

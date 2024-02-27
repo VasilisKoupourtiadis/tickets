@@ -110,6 +110,7 @@ h1:focus {
     background: linear-gradient(270deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
     border-color: #fff;
 }
+
 .dropdown-item {
     color: #fff;
     background: linear-gradient(270deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
@@ -126,13 +127,11 @@ h1:focus {
 
 .home-table-nav-button {
     color: #fff;
-    background: linear-gradient(270deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
-    border-color: #fff;
+    background: #eeaeca;
     transition: 0.3s;
 }
     .home-table-nav-button:hover {
-        background-color: #fff;
-        border-color: #fff;
+        background-color: rgba(255, 87, 160, 1);
         color: #fff;
         opacity: 0.7;
     }
