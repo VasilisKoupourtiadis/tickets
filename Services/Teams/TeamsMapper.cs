@@ -12,7 +12,9 @@ public class TeamsMapper : Profile
 
         CreateMap<Employee, GetAllTeams.EmployeeResult>();
 
-        CreateMap<Ticket, GetAllTeams.TicketResult>();
+        CreateMap<Ticket, GetAllTeams.TicketResult>()
+            .ForMember(dest => dest.Created, opt => opt.MapFrom(x => x.Created.ToString("dd MMM yyyy, HH:mm")))
+            .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(x => x.Employee.FullName));
 
         CreateMap<Team, GetTeam.TeamResult>();
 
