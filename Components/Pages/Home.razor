@@ -27,18 +27,7 @@ else
                         <li class="dropdown-item pointer" @onclick="@(() => UpdateDropdownTeam(team.Name))">@team.Name</li>
                     }
                 </ul>
-            </div>
-            <div class="dropdown">
-                <button class="btn px-3 py-2 home-table-nav-button btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    @SelectedStatus
-                </button>
-                <ul class="dropdown-menu dropdown-menu-pink">
-                    @foreach(var status in Statuses)
-                    {
-                        <li class="dropdown-item pointer" @onclick="@(() => UpdateDropdownStatus(status))">@status</li>
-                    }
-                </ul>
-            </div>
+            </div>            
         </section>
         @if(Tickets.Count != 0)
         {
@@ -100,13 +89,6 @@ else
         SortedTickets(ActiveTeam, SelectedStatus);
     }
 
-    private void UpdateDropdownStatus(string status)
-    {
-        SelectedStatus = status;
-
-        SortedTickets(ActiveTeam, SelectedStatus);
-    }
-
     private void SortedTickets(string activeTeam, string selectedStatus)
     {
         var team = Teams.FirstOrDefault(x => x.Name.ToLower() == ActiveTeam.ToLower());
@@ -117,17 +99,7 @@ else
         {
             var matchedTickets = employee.Tickets.ToList();
 
-            matchedTickets.ForEach(item => tickets.Add(item));
-
-            // var matchedTickets = employee.Tickets
-            //     .Where(x => x.Status.ToLower() == SelectedStatus.ToLower())
-            //     .ToList();
-
-            // if (matchedTickets.Count != 0)
-            // {
-            //     matchedTickets.ForEach(item => tickets.Add(item));
-            //     tickets = matchedTickets;
-            // }
+            matchedTickets.ForEach(item => tickets.Add(item));            
         }
 
         Tickets = tickets;
